@@ -5,6 +5,36 @@ import Controls from "./components/Controls";
 import soundEffects from "./utils/soundEffects";
 import "./App.css";
 
+// LocalStorage 키 상수
+const GAME_STORAGE_KEY = "numberGameState";
+
+// LocalStorage 유틸리티 함수들
+const saveGameState = (gameState) => {
+  try {
+    localStorage.setItem(GAME_STORAGE_KEY, JSON.stringify(gameState));
+  } catch (error) {
+    console.error("Failed to save game state to localStorage:", error);
+  }
+};
+
+const loadGameState = () => {
+  try {
+    const savedState = localStorage.getItem(GAME_STORAGE_KEY);
+    return savedState ? JSON.parse(savedState) : null;
+  } catch (error) {
+    console.error("Failed to load game state from localStorage:", error);
+    return null;
+  }
+};
+
+const clearGameState = () => {
+  try {
+    localStorage.removeItem(GAME_STORAGE_KEY);
+  } catch (error) {
+    console.error("Failed to clear game state from localStorage:", error);
+  }
+};
+
 // Simple modal popup for game instructions
 function HowToPlayModal({ open, onClose }) {
   if (!open) return null;
@@ -61,8 +91,11 @@ export default function App() {
     
     setIsLoading(true);
     setSelectedCells([]);
+    clearGameState(); // 새 게임 시작 시 저장된 상태 삭제
+    
     startGame().then((data) => {
       setGame(data);
+      saveGameState(data); // 새 게임 상태 저장
       setIsLoading(false);
     }).catch((error) => {
       console.error("Failed to start game:", error);
@@ -70,9 +103,26 @@ export default function App() {
     });
   };
 
+  // 게임 상태가 변경될 때마다 LocalStorage에 저장
+  useEffect(() => {
+    if (game) {
+      saveGameState(game);
+    }
+  }, [game]);
+
   // useEffect runs once when the component mounts (like componentDidMount)
   useEffect(() => {
-    startNewGame(); // Start a new game on first load
+    // 저장된 게임 상태가 있는지 확인
+    const savedGame = loadGameState();
+    
+    if (savedGame && savedGame.board && savedGame.remaining_adds !== undefined) {
+      // 저장된 게임 상태가 있으면 복원
+      setGame(savedGame);
+      setIsLoading(false);
+    } else {
+      // 저장된 게임 상태가 없으면 새 게임 시작
+      startNewGame();
+    }
   }, []); // empty dependency array: only run once
 
   // Handles when a user clicks a cell on the board
@@ -140,6 +190,7 @@ export default function App() {
         if (data.game_won) {
           // Play win sound
           soundEffects.win();
+          clearGameState(); // 게임 승리 시 저장된 상태 삭제
           setTimeout(() => alert("Game Win! 🎉"), 800); // Delay alert to let win sound play
         }
       })
