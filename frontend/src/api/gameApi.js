@@ -1,7 +1,7 @@
 // This file contains functions to communicate with the backend API (FastAPI)
 // Each function sends a request to the backend and returns the result
 
-const API = "http://localhost:8000"; // Backend server address (changed to avoid conflict with frontend)
+const API = process.env.REACT_APP_API_URL || "http://localhost:8000"; // Backend server address (changed to avoid conflict with frontend)
 
 // Start a new game by sending a POST request to /start
 export async function startGame() {

@@ -8,10 +8,15 @@ import json
 # Create the FastAPI app (the backend server)
 app = FastAPI()
 
-# Allow requests from the frontend (React running on localhost:3000)
+# Allow requests from the frontend (React running on localhost:3000 and deployed domains)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # React development server
+    allow_origins=[
+        "http://localhost:3000",  # React development server
+        "https://*.vercel.app",   # Vercel deployed domains
+        "https://*.netlify.app",  # Netlify deployed domains
+        "https://*.github.io",    # GitHub Pages deployed domains
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
