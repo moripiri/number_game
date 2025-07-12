@@ -6,7 +6,7 @@ from typing import Tuple
 import json
 
 # Create the FastAPI app (the backend server)
-app = FastAPI()
+app = FastAPI(title="Number Game API", version="1.0.0")
 
 # Allow requests from the frontend (React running on localhost:3000 and deployed domains)
 app.add_middleware(
@@ -21,6 +21,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Health check endpoint
+@app.get("/")
+def health_check():
+    return {"status": "healthy", "message": "Number Game API is running"}
 
 # Endpoint to start a new game
 @app.post("/start")

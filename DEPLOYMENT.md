@@ -15,10 +15,13 @@
 
 3. **환경 설정**
    - Railway가 자동으로 Python 프로젝트를 인식
-   - `backend/` 폴더를 루트로 설정
+   - **중요**: Root Directory를 `backend`로 설정
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
 
 4. **배포 확인**
    - 배포가 완료되면 Railway에서 제공하는 URL을 복사 (예: `https://your-app.railway.app`)
+   - URL + `/`로 접속하여 "Number Game API is running" 메시지 확인
 
 ### 2. 프론트엔드 배포 (Vercel)
 
@@ -68,6 +71,10 @@ npm start
 1. **CORS 오류**: 백엔드의 `allow_origins`에 프론트엔드 도메인 추가
 2. **API 연결 실패**: 환경변수 `REACT_APP_API_URL` 확인
 3. **빌드 실패**: `npm install` 후 `npm run build` 테스트
+4. **Railway 모듈 오류**: 
+   - Root Directory가 `backend`로 설정되어 있는지 확인
+   - `requirements.txt`에 모든 의존성이 명시되어 있는지 확인
+   - Railway 대시보드에서 로그 확인
 
 ## 비용
 
