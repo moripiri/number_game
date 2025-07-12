@@ -1,0 +1,81 @@
+.board-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.board-container .loading {
+  font-size: 1.2rem;
+  color: #666;
+  padding: 20px;
+}
+
+.game-board {
+  border-collapse: collapse;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.game-board td {
+  width: 60px;
+  height: 60px;
+  border: 2px solid #dee2e6;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 24px;
+  font-weight: bold;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.game-board td:hover {
+  background-color: #e9ecef;
+  transform: scale(1.05);
+}
+
+.game-board td:empty {
+  background-color: #f8f9fa;
+  cursor: default;
+}
+
+.game-board td:empty:hover {
+  background-color: #f8f9fa;
+  transform: none;
+}
+
+.game-board td.selected {
+  background-color: #007bff;
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+
+.game-board td.selected:hover {
+  background-color: #0056b3;
+}
+
+.game-board td.cell--new {
+  animation: cellNewAppear 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+  background-color: #ffe066;
+  z-index: 1;
+}
+
+@keyframes cellNewAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+} 
