@@ -1,17 +1,33 @@
 // This file contains functions to communicate with the backend API (FastAPI)
 // Each function sends a request to the backend and returns the result
 
-const API = process.env.REACT_APP_API_URL || "http://localhost:8000"; // Backend server address (changed to avoid conflict with frontend)
+// 임시로 Railway URL을 직접 설정 (환경변수 설정 후 제거)
+const API = process.env.REACT_APP_API_URL || "https://your-railway-app.railway.app"; // Backend server address
+
+// Debug: Log the API URL being used
+console.log("API URL:", API);
 
 // Start a new game by sending a POST request to /start
 export async function startGame() {
-  const res = await fetch(`${API}/start`, { 
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
+  console.log("Starting game, calling:", `${API}/start`);
+  try {
+    const res = await fetch(`${API}/start`, { 
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    console.log("Response status:", res.status);
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
     }
-  });
-  return res.json(); // Returns the initial game state
+    const data = await res.json();
+    console.log("Game started successfully:", data);
+    return data;
+  } catch (error) {
+    console.error("Error starting game:", error);
+    throw error;
+  }
 }
 
 // Try to remove two numbers from the board

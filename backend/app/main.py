@@ -16,6 +16,7 @@ app.add_middleware(
         "https://*.vercel.app",   # Vercel deployed domains
         "https://*.netlify.app",  # Netlify deployed domains
         "https://*.github.io",    # GitHub Pages deployed domains
+        "*",  # Allow all origins for debugging (remove in production)
     ],
     allow_credentials=True,
     allow_methods=["*"],
