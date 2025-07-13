@@ -43,11 +43,12 @@ function HowToPlayModal({ open, onClose }) {
       <div className="modal-content" onClick={e => e.stopPropagation()}>
         <h2>How to Play</h2>
         <ul>
-          <li>At the start, 4 of each number from 1 to 9 are randomly placed in a 4x9 board (36 numbers).</li>
-          <li>You can remove two numbers if they are <b>adjacent</b> (including diagonals), or if there are no numbers between them (even across rows).</li>
-          <li>The two numbers must be <b>the same</b> or <b>sum to 10</b>.</li>
-          <li>You can add a new set of 36 numbers up to 5 times using the Add Numbers button.</li>
-          <li>Click two numbers to try to remove them. If not removable, your selection will be cleared.</li>
+          <li> 1. 합이 10이 되는 두 숫자나 같은 숫자를 선택해서 지울 수 있습니다.</li>
+          <li> 2. 두 숫자는 가로세로나 대각선으로 인접해야 합니다.</li>
+          <li> 3. 단 인접하지 않아도 두 숫자 사이에 빈 칸만 있으면 지울 수 있습니다.</li>
+          <li> 4. 두 숫자 사이에 줄이 바뀌어도 그 사이에 숫자가 없다면 가로로 인접합니다. </li>
+          <li> 5. 지울 숫자가 없다면 숫자를 추가할 수 있습니다 (최대 5번) </li>
+          <li> 6. 모든 숫자를 지우면 게임이 끝납니다.</li>
         </ul>
         <button className="close-modal" onClick={onClose}>Close</button>
       </div>
