@@ -7,6 +7,7 @@ import "./App.css";
 
 // LocalStorage 키 상수
 const GAME_STORAGE_KEY = "numberGameState";
+const SCORE_STORAGE_KEY = "numberGameScore";
 
 // LocalStorage 유틸리티 함수들
 const saveGameState = (gameState) => {
@@ -14,6 +15,14 @@ const saveGameState = (gameState) => {
     localStorage.setItem(GAME_STORAGE_KEY, JSON.stringify(gameState));
   } catch (error) {
     console.error("Failed to save game state to localStorage:", error);
+  }
+};
+
+const saveScore = (score) => {
+  try {
+    localStorage.setItem(SCORE_STORAGE_KEY, JSON.stringify(score));
+  } catch (error) {
+    console.error("Failed to save score to localStorage:", error);
   }
 };
 
@@ -27,9 +36,20 @@ const loadGameState = () => {
   }
 };
 
+const loadScore = () => {
+  try {
+    const savedScore = localStorage.getItem(SCORE_STORAGE_KEY);
+    return savedScore ? JSON.parse(savedScore) : 1000;
+  } catch (error) {
+    console.error("Failed to load score from localStorage:", error);
+    return 1000;
+  }
+};
+
 const clearGameState = () => {
   try {
     localStorage.removeItem(GAME_STORAGE_KEY);
+    localStorage.removeItem(SCORE_STORAGE_KEY);
   } catch (error) {
     console.error("Failed to clear game state from localStorage:", error);
   }
@@ -47,7 +67,7 @@ function HowToPlayModal({ open, onClose }) {
           <li> 2. 두 숫자는 가로세로나 대각선으로 인접해야 합니다.</li>
           <li> 3. 단 인접하지 않아도 두 숫자 사이에 빈 칸만 있으면 지울 수 있습니다.</li>
           <li> 4. 두 숫자 사이에 줄이 바뀌어도 그 사이에 숫자가 없다면 가로로 인접합니다. </li>
-          <li> 5. 지울 숫자가 없다면 숫자를 추가할 수 있습니다 (무제한) </li>
+          <li> 5. 지울 숫자가 없다면 숫자를 추가할 수 있습니다 </li>
           <li> 6. 모든 숫자를 지우면 게임이 끝납니다.</li>
         </ul>
         <button className="close-modal" onClick={onClose}>닫기</button>
@@ -76,6 +96,8 @@ export default function App() {
   const prevBoardRef = useRef(null);
   // sound on/off state
   const [soundOn, setSoundOn] = useState(true);
+  // 점수 state
+  const [score, setScore] = useState(loadScore());
 
   // Toggle sound
   const toggleSound = () => {
@@ -93,6 +115,7 @@ export default function App() {
     setIsLoading(true);
     setSelectedCells([]);
     clearGameState(); // 새 게임 시작 시 저장된 상태 삭제
+    setScore(1000); // 새 게임 시작 시 점수 초기화
     
     startGame().then((data) => {
       setGame(data);
@@ -108,8 +131,9 @@ export default function App() {
   useEffect(() => {
     if (game) {
       saveGameState(game);
+      saveScore(score); // 점수도 저장
     }
-  }, [game]);
+  }, [game, score]);
 
   // useEffect runs once when the component mounts (like componentDidMount)
   useEffect(() => {
@@ -119,6 +143,7 @@ export default function App() {
     if (savedGame && savedGame.board && savedGame.remaining_adds !== undefined) {
       // 저장된 게임 상태가 있으면 복원
       setGame(savedGame);
+      setScore(loadScore()); // 저장된 점수 복원
       setIsLoading(false);
     } else {
       // 저장된 게임 상태가 없으면 새 게임 시작
@@ -193,6 +218,9 @@ export default function App() {
           soundEffects.win();
           clearGameState(); // 게임 승리 시 저장된 상태 삭제
           setTimeout(() => alert("게임 승리! 🎉"), 800); // Delay alert to let win sound play
+        } else {
+          // 점수 감소
+          setScore(prevScore => prevScore - 1);
         }
       })
       .catch(async (error) => {
@@ -275,6 +303,9 @@ export default function App() {
       <h1 className="game-title">숫자 게임</h1>
       <div className="controls-row">
         <button className="new-game-button" onClick={startNewGame}>새 게임</button>
+        <div className="score-display">
+          점수: {score}
+        </div>
         {game && <Controls remaining={game.remaining_adds} onAdd={handleAdd} />}
       </div>
       <Board 
