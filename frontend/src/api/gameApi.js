@@ -1,11 +1,15 @@
 // This file contains functions to communicate with the backend API (FastAPI)
 // Each function sends a request to the backend and returns the result
 
-// 임시로 Railway URL을 직접 설정 (환경변수 설정 후 제거)
-const API = process.env.REACT_APP_API_URL || "https://your-railway-app.railway.app"; // Backend server address
+// 백엔드 URL 설정
+const API = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
 // Debug: Log the API URL being used
 console.log("API URL:", API);
+console.log("Environment variables:", {
+  REACT_APP_API_URL: process.env.REACT_APP_API_URL,
+  NODE_ENV: process.env.NODE_ENV
+});
 
 // Start a new game by sending a POST request to /start
 export async function startGame() {
@@ -18,14 +22,24 @@ export async function startGame() {
       }
     });
     console.log("Response status:", res.status);
+    console.log("Response headers:", Object.fromEntries(res.headers.entries()));
+    
     if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
+      const errorText = await res.text();
+      console.error("Response error text:", errorText);
+      throw new Error(`HTTP error! status: ${res.status}, message: ${errorText}`);
     }
+    
     const data = await res.json();
     console.log("Game started successfully:", data);
     return data;
   } catch (error) {
     console.error("Error starting game:", error);
+    console.error("Error details:", {
+      message: error.message,
+      stack: error.stack,
+      API_URL: API
+    });
     throw error;
   }
 }
