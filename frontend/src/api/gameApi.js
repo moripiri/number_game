@@ -1,8 +1,8 @@
 // This file contains functions to communicate with the backend API (FastAPI)
 // Each function sends a request to the backend and returns the result
 
-// 백엔드 URL 설정
-const API = process.env.REACT_APP_API_URL || "http://localhost:8000";
+// 백엔드 URL 설정 (끝에 슬래시 제거)
+const API = (process.env.REACT_APP_API_URL || "http://localhost:8000").replace(/\/$/, "");
 
 // Debug: Log the API URL being used
 console.log("API URL:", API);
