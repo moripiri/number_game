@@ -32,7 +32,7 @@ def health_check():
 @app.post("/start")
 def start_game():
     board = create_initial_board()  # Generate a new random board
-    state = GameState(board=board, remaining_adds=5)  # 5 adds allowed
+    state = GameState(board=board, remaining_adds=999)  # Unlimited adds (999 is effectively unlimited)
     return state  # Return the initial game state as JSON
 
 # Endpoint to try to remove two numbers from the board
@@ -67,11 +67,12 @@ def get_last_number_index(row):
             return i
     return -1  # 숫자가 없으면 -1
 
-# Endpoint to add remaining numbers from the current board (up to 5 times)
+# Endpoint to add remaining numbers from the current board (unlimited times)
 @app.post("/add")
 def add_numbers(state: GameState):
-    if state.remaining_adds <= 0:
-        raise HTTPException(400, "No adds left")
+    # Remove the limit check - allow unlimited adds
+    # if state.remaining_adds <= 0:
+    #     raise HTTPException(400, "No adds left")
     
     # Create new board using remaining numbers from current board
     new_board = create_board_from_remaining(state.board)
@@ -104,5 +105,6 @@ def add_numbers(state: GameState):
         while len(last_row) < 9:
             last_row.append(None)
     
-    state.remaining_adds -= 1
+    # Don't decrease remaining_adds - keep it unlimited
+    # state.remaining_adds -= 1
     return state 

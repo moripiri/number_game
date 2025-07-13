@@ -7,9 +7,8 @@ export default function Controls({ remaining, onAdd }) {
       <button 
         className="add-button" 
         onClick={onAdd} 
-        disabled={remaining <= 0}
       >
-        Add Numbers ({remaining}번 남음!)
+        숫자 추가
       </button>
     </div>
   );

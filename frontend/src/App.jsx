@@ -41,16 +41,16 @@ function HowToPlayModal({ open, onClose }) {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
-        <h2>How to Play</h2>
+        <h2>게임 방법</h2>
         <ul>
           <li> 1. 합이 10이 되는 두 숫자나 같은 숫자를 선택해서 지울 수 있습니다.</li>
           <li> 2. 두 숫자는 가로세로나 대각선으로 인접해야 합니다.</li>
           <li> 3. 단 인접하지 않아도 두 숫자 사이에 빈 칸만 있으면 지울 수 있습니다.</li>
           <li> 4. 두 숫자 사이에 줄이 바뀌어도 그 사이에 숫자가 없다면 가로로 인접합니다. </li>
-          <li> 5. 지울 숫자가 없다면 숫자를 추가할 수 있습니다 (최대 5번) </li>
+          <li> 5. 지울 숫자가 없다면 숫자를 추가할 수 있습니다 (무제한) </li>
           <li> 6. 모든 숫자를 지우면 게임이 끝납니다.</li>
         </ul>
-        <button className="close-modal" onClick={onClose}>Close</button>
+        <button className="close-modal" onClick={onClose}>닫기</button>
       </div>
     </div>
   );
@@ -192,7 +192,7 @@ export default function App() {
           // Play win sound
           soundEffects.win();
           clearGameState(); // 게임 승리 시 저장된 상태 삭제
-          setTimeout(() => alert("Game Win! 🎉"), 800); // Delay alert to let win sound play
+          setTimeout(() => alert("게임 승리! 🎉"), 800); // Delay alert to let win sound play
         }
       })
       .catch(async (error) => {
@@ -272,9 +272,9 @@ export default function App() {
         ?
       </button>
       <HowToPlayModal open={showHowTo} onClose={() => setShowHowTo(false)} />
-      <h1 className="game-title">Number Game</h1>
+      <h1 className="game-title">숫자 게임</h1>
       <div className="controls-row">
-        <button className="new-game-button" onClick={startNewGame}>New Game</button>
+        <button className="new-game-button" onClick={startNewGame}>새 게임</button>
         {game && <Controls remaining={game.remaining_adds} onAdd={handleAdd} />}
       </div>
       <Board 
