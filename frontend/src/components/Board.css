@@ -26,8 +26,9 @@
 }
 
 .game-board td {
-  width: 1fr;
-  aspect-ratio: 1; /* 정사각형 유지 */
+  width: 11.111%; /* 100% / 9개 셀 */
+  height: 0;
+  padding-bottom: 11.111%; /* 정사각형 만들기 */
   border: 2px solid #dee2e6;
   text-align: center;
   vertical-align: middle;
@@ -38,6 +39,9 @@
   transition: all 0.2s ease;
   user-select: none;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .game-board td:hover {
